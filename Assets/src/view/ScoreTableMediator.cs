@@ -16,7 +16,9 @@ public class ScoreTableMediator : MonoBehaviour {
         scoreD = gameObject.transform.Find("scoreD").gameObject.GetComponent<SpriteRenderer>();
         scoreMain = gameObject.transform.Find("scoreMain").gameObject.GetComponent<SpriteRenderer>();
         EventManager.StartListening(Config.ON_SCORE_CHANGED, onScoreChanged);
-	}
+        onScoreChanged();
+
+    }
 
     void onScoreChanged()
     {

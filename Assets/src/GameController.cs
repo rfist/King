@@ -74,21 +74,35 @@ public class GameController
     {
         PlayerVO grabber;
         CardVO maxCard = GameModel.inst.cardsOnDeck[0] as CardVO;
-        for (int i = 1; i < GameModel.inst.cardsOnDeck.Count; i++)
+
+        string[] goals = new string[4]; 
+        for (int i = 0; i < GameModel.inst.cardsOnDeck.Count; i++)
         {
             CardVO currentCard = GameModel.inst.cardsOnDeck[i] as CardVO;
+            string goalType = currentCard.Suit + "_"  + currentCard.Rank;
+            goals[i] = goalType;
             if (maxCard.Suit == currentCard.Suit && currentCard.Rank > maxCard.Rank)
             {
-                maxCard = GameModel.inst.cardsOnDeck[i] as CardVO;
+                maxCard = GameModel.inst.cardsOnDeck[i] as CardVO;       
             }
         }
         grabber = maxCard.Owner;
         // Count results
-        int numIndex = Array.IndexOf(GameModel.inst.level.Goals, RuleModel.GOAL_TRICK);
+        int numIndex;
+        numIndex = Array.IndexOf(GameModel.inst.level.Goals, RuleModel.GOAL_TRICK);
         if (numIndex > -1)
         {
             grabber.Goals.Add(RuleModel.GOAL_TRICK);
             GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
+        }
+        for (int j = 0; j < goals.Length; j++)
+        {
+            numIndex = Array.IndexOf(GameModel.inst.level.Goals, goals[j]);
+            if (numIndex > -1)
+            {
+                grabber.Goals.Add(goals[j]);
+                GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
+            }
         }
        
         GameModel.inst.currentPlayer = grabber;        

@@ -17,9 +17,11 @@ public class Context : MonoBehaviour {
 
     void initLevels()
     {
-        LevelVO level = new LevelVO(1, true, GameStrategy.NO_TRICKS, "Levels/Level1");
-        level.Goals = new string[] { RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK , RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK };
+        // LevelVO level = new LevelVO(1, true, GameStrategy.NO_TRICKS, "Levels/Level1");
+        // level.Goals = new string[] { RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK , RuleModel.GOAL_TRICK, RuleModel.GOAL_TRICK };
 
+        LevelVO level = new LevelVO(2, true, GameStrategy.NO_HEARTS, "Levels/Level2");
+        level.Goals = new string[] { "4_1", "4_2", "4_3", "4_4", "4_5", "4_6", "4_7", "4_8" };
         GameModel.inst.level = level;      
     }
 

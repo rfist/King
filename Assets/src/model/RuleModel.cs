@@ -17,7 +17,7 @@ public class RuleModel
 public enum GameStrategy
 {
     NO_TRICKS,
-    Hearts,
+    NO_HEARTS,
     Spades,
     Diamonds
 }
