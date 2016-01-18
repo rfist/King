@@ -7,6 +7,8 @@ public class GameController
 {
     private static GameController instance;
     public GameController() { }
+    private int _currentLevelIndex = -1;
+
 
     public static GameController inst
     {
@@ -25,6 +27,13 @@ public class GameController
         return true;
     }
 
+    public void changeLevel()
+    {
+        _currentLevelIndex++;
+        GameModel.inst.level = GameModel.inst.LevelsData[_currentLevelIndex];
+        EventManager.TriggerEvent(Config.ON_SCORE_CHANGED);
+    }
+
     public void startGame()
     {
         EventManager.StartListening(Config.ON_TURN_ANIMATION_FINISHED, onTurnFinished);
@@ -38,7 +47,11 @@ public class GameController
         {
             EventManager.TriggerEvent(Config.ON_SCORE_CHANGED);
             // TODO: check if level ended
-            if (GameModel.inst.currentPlayer.Id != Config.PLAYER_ME)
+            if (GameModel.inst.currentPlayer.Deck.Count == 0 || GameModel.inst.level.Goals.Length == 0)
+            {
+                CommandManager.inst.addCommand(typeof(EndRoundCommand));
+            }
+            else if (GameModel.inst.currentPlayer.Id != Config.PLAYER_ME)
             {
                 CommandManager.inst.addCommand(typeof(PlayTurnCommand));
             }
@@ -95,6 +108,7 @@ public class GameController
             grabber.Goals.Add(RuleModel.GOAL_TRICK);
             GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
         }
+
         for (int j = 0; j < goals.Length; j++)
         {
             numIndex = Array.IndexOf(GameModel.inst.level.Goals, goals[j]);
@@ -104,9 +118,31 @@ public class GameController
                 GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
             }
         }
-       
+
+        // check last tricks
+        numIndex = Array.IndexOf(GameModel.inst.level.Goals, RuleModel.TRICK_7);
+        if (grabber.Deck.Count == 2 && numIndex > -1)
+        {
+            grabber.Goals.Add(RuleModel.TRICK_7);
+            GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
+        }
+        numIndex = Array.IndexOf(GameModel.inst.level.Goals, RuleModel.TRICK_8);
+        if (grabber.Deck.Count == 1 && numIndex > -1)
+        {
+            grabber.Goals.Add(RuleModel.TRICK_8);
+            GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
+        }
+
+        // all rules together
+        numIndex = Array.IndexOf(GameModel.inst.level.Goals, RuleModel.ANY);
+        if (numIndex > -1)
+        {
+            grabber.Goals.Add(goals);
+            GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
+        }
+
         GameModel.inst.currentPlayer = grabber;        
-        Debug.Log("max card " + maxCard.Id + " grabber " + grabber.Id);
+        Debug.Log("max card " + maxCard.Id + " grabber " + grabber.Id + " left cards " + grabber.Deck.Count);
         AnimationHelper.grabCards(grabber);
     }
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 public class GameModel
 {
@@ -12,6 +12,7 @@ public class GameModel
     public ArrayList cardsOnDeck = new ArrayList();
     public PlayerVO[] Players = new PlayerVO[4];
     public RuleModel ruleModel;
+    public List<LevelVO> LevelsData = new List<LevelVO>();
 
     public GameModel() {
         ruleModel = new RuleModel();

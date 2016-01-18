@@ -9,14 +9,16 @@ public class LevelVO
     public string[] Goals;
     public string[] Rules;
     public GameStrategy Strategy;
+    public int FirstPlayer = 0;
 
 
-    public LevelVO(int Id, bool isNegative, GameStrategy Strategy, string RuleImage)
+    public LevelVO(int Id, bool isNegative, GameStrategy Strategy, string RuleImage, int FirstPLayer)
     {
         this.Id = Id;
         this.isNegative = isNegative;
         this.RuleImage = RuleImage;
         this.Strategy = Strategy;
+        this.FirstPlayer = FirstPlayer;
     }
 
 
