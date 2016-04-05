@@ -15,7 +15,7 @@ public class AnimationHelper
         Vector3 position = GameObject.Find(namePositionPoint).transform.position;
         AudioManager.inst.playEndTurn();
         iTween.MoveTo(card.gameObject, iTween.Hash("x", position.x, "y", position.y, "time", 0.5, "oncomplete", "endTurn")); // callback is in CardMediator
-        Debug.Log("select card # " + card.Id);
+  //      Debug.Log("select card # " + card.Id);
     }
 
     public static void grabCards(PlayerVO grabber)
@@ -40,6 +40,6 @@ public class AnimationHelper
         Vector3 position = card.gameObject.transform.position;
         card.gameObject.transform.position = new Vector3(startPosotion.x, startPosotion.y, 1);
         iTween.MoveTo(card.gameObject, iTween.Hash("x", position.x, "y", position.y, "delay", delay, "time", Config.SPEED_DISTRIBUTION, "oncomplete", "endDistribution")); // callback is in CardMediator
-        Debug.Log("select card # " + card.Id);
+//        Debug.Log("select card # " + card.Id);
     }
 }
