@@ -9,6 +9,7 @@ public class EndRoundCommand : MonoBehaviour, ICommand
 
     public void execute()
     {
+
         Debug.Log("EndRoundCommand");
 
         // remove all cards
@@ -28,13 +29,8 @@ public class EndRoundCommand : MonoBehaviour, ICommand
             GameModel.inst.Players[j].Goals = new ArrayList();
         }
 
+        CommandManager.inst.addCommand(typeof(ShowScoreCommand));
 
-        // start next level        
-        GameController.inst.changeLevel();
-        EventManager.TriggerEvent(Config.ON_SCORE_CHANGED);
-        CommandManager.inst.addCommand(typeof(ShuffleDeckCommand));
-        CommandManager.inst.addCommand(typeof(DistributeCardsCommand));
-        GameModel.inst.currentPlayer = GameModel.inst.Players[GameModel.inst.level.FirstPlayer];
     }
 
     void removeCard(CardVO card)

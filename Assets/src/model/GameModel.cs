@@ -12,7 +12,9 @@ public class GameModel
     public ArrayList cardsOnDeck = new ArrayList();
     public PlayerVO[] Players = new PlayerVO[4];
     public RuleModel ruleModel;
-    public List<LevelVO> LevelsData = new List<LevelVO>();
+    public List<LevelVO> LevelsData = new List<LevelVO>(); 
+    public List<LevelVO> LevelsDataForCount = new List<LevelVO>(); 
+    public string GameStatus = Config.GAME_STATUS_ACTIVE;
 
     public GameModel() {
         ruleModel = new RuleModel();

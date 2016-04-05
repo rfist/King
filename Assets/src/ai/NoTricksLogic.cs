@@ -66,8 +66,14 @@ public class NoTricksLogic
                             if (playingCard.Rank > maxCard.Rank) // если текущая карта той же масти, но больше максимальной, то берем ту что помешье
                             {
                                 playingCard = card;
+                            }                         
+                        }
+                        else
+                        {
+                            if (card.Rank < playingCard.Rank) // если больше максимальной, но меньше текущей
+                            {
+                                playingCard = card;
                             }
-                            
                         }
                     }
                 }

@@ -3,28 +3,50 @@ using System.Collections;
 
 public class NoHeartsLogic
 {
-    public NoHeartsLogic() { }
+    public NoHeartsLogic()
+    { }
 
     public static CardVO getCardForPlay(ArrayList deck)
     {
         CardVO playingCard = null;
+        CardVO playingHeartCard = null;
         if (GameModel.inst.cardsOnDeck.Count == 0)
         {
             for (int k = 0; k < deck.Count; k++)
             {
                 CardVO card = deck[k] as CardVO;
-                if (playingCard == null)
+                if (card.Suit != Config.HEARTS_SUIT)
                 {
-                    playingCard = card;
-                }
-                else
-                {
-                    if (card.Rank < playingCard.Rank) // отдаем самую меншьую карту
+                    if (playingCard == null)
                     {
                         playingCard = card;
                     }
+                    else
+                    {
+                        if (card.Rank < playingCard.Rank) // отдаем самую меншьую карту
+                        {
+                            playingCard = card;
+                        }
+                    }
                 }
-
+                else
+                {
+                    if (playingHeartCard == null)
+                    {
+                        playingHeartCard = card;
+                    }
+                    else
+                    {
+                        if (card.Rank < playingHeartCard.Rank) // отдаем самую меншьую карту
+                        {
+                            playingHeartCard = card;
+                        }
+                    }
+                }
+            }
+            if (playingCard == null)
+            {
+                playingCard = playingHeartCard; // если нет никаких других карт, то ходим с чирвы
             }
         }
         else
@@ -51,7 +73,7 @@ public class NoHeartsLogic
                     }
                     else
                     {
-                        if (card.Rank < maxCard.Rank) 
+                        if (card.Rank < maxCard.Rank)
                         {
                             if (playingCard.Rank > maxCard.Rank && card.Rank > playingCard.Rank) // если меньших нет, то отдаем самую крупную карту
                             {
@@ -67,7 +89,7 @@ public class NoHeartsLogic
                             {
                                 playingCard = card;
                             }
-                            
+
                         }
                     }
                 }

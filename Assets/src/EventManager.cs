@@ -8,6 +8,12 @@ public class EventManager : MonoBehaviour
     // source http://unity3d.com/ru/learn/tutorials/modules/intermediate/live-training-archive/events-creating-simple-messaging-system
     private Dictionary<string, UnityEvent> eventDictionary;
 
+    public static string SHOW_SCORE = "SHOW_SCORE";
+    public static string HIDE_SCORE = "HIDE_SCORE";
+
+    public static string SHOW_SCORE_TABLE = "SHOW_SCORE_TABLE";
+    public static string HIDE_SCORE_TABLE = "HIDE_SCORE_TABLE";
+
     private static EventManager eventManager;
 
     public static EventManager instance

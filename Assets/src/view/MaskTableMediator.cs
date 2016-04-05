@@ -10,14 +10,28 @@ public class MaskTableMediator : MonoBehaviour {
         rend = GetComponent<Renderer>();
         rend.enabled = true;
         rend.sharedMaterial = materials[0];
-        //gameObject.active = false;
-        //SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
-        //gameObject.
+        EventManager.StartListening(EventManager.SHOW_SCORE_TABLE, Show);
 
+        EventManager.StartListening(EventManager.HIDE_SCORE_TABLE, Hide);
+        gameObject.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void Show()
+    {
+        rend.enabled = true;
+        rend.sharedMaterial = materials[1];
+        gameObject.SetActive(true);
+    }
+
+    void Hide()
+    {
+        rend.enabled = true;
+        rend.sharedMaterial = materials[0];
+        gameObject.SetActive(false);
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 }

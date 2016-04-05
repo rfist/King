@@ -7,7 +7,7 @@ public class GameController
 {
     private static GameController instance;
     public GameController() { }
-    private int _currentLevelIndex = -1;
+    public int currentLevelIndex = -1;
 
 
     public static GameController inst
@@ -24,25 +24,102 @@ public class GameController
 
     public bool checkIfTurnValid(CardVO card)
     {
-        return true;
+        if (GameModel.inst.level.Strategy == GameStrategy.NO_HEARTS || GameModel.inst.level.Strategy == GameStrategy.NO_ANY 
+            || GameModel.inst.level.Strategy == GameStrategy.TAKE_HEARTS || GameModel.inst.level.Strategy == GameStrategy.TAKE_ANY 
+            || GameModel.inst.level.Strategy == GameStrategy.NO_KING|| GameModel.inst.level.Strategy == GameStrategy.TAKE_KING)
+        {
+            if (GameModel.inst.cardsOnDeck.Count == 0 && card.Suit == Config.HEARTS_SUIT &&
+                (card.Owner.hasSuit(Config.DIAMONDS_SUIT) || card.Owner.hasSuit(Config.CLUBS_SUIT) || card.Owner.hasSuit(Config.SPADES_SUIT)) // если есть какая-то масть кроме чирвы, то с чирвы ходить нельзя
+                )
+            {
+                return false;
+            }
+       }
+
+        if (GameModel.inst.level.Strategy == GameStrategy.NO_KING || GameModel.inst.level.Strategy == GameStrategy.NO_ANY || GameModel.inst.level.Strategy == GameStrategy.TAKE_KING || GameModel.inst.level.Strategy == GameStrategy.TAKE_ANY)
+        {
+            bool hasKingCard = false;
+            bool hasSameSuite = false;
+            CardVO playerCard;
+            if (GameModel.inst.cardsOnDeck.Count > 0)
+            {
+                for (int i = 0; i < GameModel.inst.Players[Config.PLAYER_ME].Deck.Count; i++)
+                {
+                    playerCard = GameModel.inst.Players[Config.PLAYER_ME].Deck[i] as CardVO;
+                    if (playerCard.Suit == Config.HEARTS_SUIT && playerCard.Rank == Config.KING_RANK)
+                    {
+                        hasKingCard = true;
+                    }
+                    if (playerCard.Suit == (GameModel.inst.cardsOnDeck[0] as CardVO).Suit)
+                    {
+                        hasSameSuite = true;
+                    }
+                }
+
+                if ((GameModel.inst.cardsOnDeck[0] as CardVO).Suit != card.Suit && !hasSameSuite && hasKingCard)
+                {
+                    return card.Suit == Config.HEARTS_SUIT && card.Rank == Config.KING_RANK;
+                }
+            }
+        }
+
+
+        if (GameModel.inst.cardsOnDeck.Count == 0)
+        {
+            return true;
+        }
+        CardVO firstCatd = GameModel.inst.cardsOnDeck[0] as CardVO;
+        if (card.Suit == firstCatd.Suit || !card.Owner.hasSuit(firstCatd.Suit))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void changeLevel()
     {
-        _currentLevelIndex++;
-        GameModel.inst.level = GameModel.inst.LevelsData[_currentLevelIndex];
+        currentLevelIndex++;
+        if (currentLevelIndex > 13)
+        {
+            GameModel.inst.GameStatus = Config.GAME_STATUS_FINISHED;
+            // EventManager.TriggerEvent(Config.ON_GAME_END);
+        }
+        else
+        {
+            GameModel.inst.level = GameModel.inst.LevelsData[currentLevelIndex];
+            GameModel.inst.level.History = new ArrayList();
+            CommandManager.inst.addCommand(typeof(ShuffleDeckCommand));
+            CommandManager.inst.addCommand(typeof(DistributeCardsCommand));
+            GameModel.inst.currentPlayer = GameModel.inst.Players[GameModel.inst.level.FirstPlayer];            
+
+            for (int i = 0; i < GameModel.inst.Players.Length; i++)
+            {
+                GameModel.inst.Players[i].LevelScore = 0;
+            }
+        }        
         EventManager.TriggerEvent(Config.ON_SCORE_CHANGED);
+    }
+
+    public void addListeners()
+    {
+        EventManager.StartListening(Config.ON_TURN_ANIMATION_FINISHED, onTurnFinished);
+        EventManager.StartListening(Config.ON_GRAB_ANIMATION_FINISHED, onGrabFinished);
+        EventManager.StartListening(Config.ON_START_ANIMATION_FINISHED, startGame);
     }
 
     public void startGame()
     {
-        EventManager.StartListening(Config.ON_TURN_ANIMATION_FINISHED, onTurnFinished);
-        EventManager.StartListening(Config.ON_GRAB_ANIMATION_FINISHED, onGrabFinished);
+        GameModel.inst.cardsOnDeck = new ArrayList();
+        Debug.Log("start game" +  GameModel.inst.level.Id);
+        onGrabFinished();
     }
 
     void onGrabFinished()
     {
-        Debug.Log("onGrabFinished " + GameModel.inst.cardsOnDeck.Count);
+        Debug.Log("onGrabFinished " + GameModel.inst.cardsOnDeck.Count + " player id " + GameModel.inst.currentPlayer.Id);
         if (GameModel.inst.cardsOnDeck.Count == 0)
         {
             EventManager.TriggerEvent(Config.ON_SCORE_CHANGED);
@@ -60,7 +137,7 @@ public class GameController
 
     void onTurnFinished()
     {
-        Debug.Log("turn finished");
+        Debug.Log("turn finished by player " + GameModel.inst.currentPlayer.Id);
         if (GameModel.inst.cardsOnDeck.Count >= GameModel.inst.Players.Length)
         {
             Debug.Log("all players makes their turns!");
@@ -74,7 +151,7 @@ public class GameController
             {
                 currentPlayer = 0;
             }
-            Debug.Log("turn finished " + currentPlayer);
+            Debug.Log("next player " + currentPlayer);
             GameModel.inst.currentPlayer = GameModel.inst.Players[currentPlayer];
             if (GameModel.inst.currentPlayer.Id != Config.PLAYER_ME)
             {
@@ -93,6 +170,7 @@ public class GameController
         {
             CardVO currentCard = GameModel.inst.cardsOnDeck[i] as CardVO;
             string goalType = currentCard.Suit + "_"  + currentCard.Rank;
+            Debug.Log("num card " + i + " card " + goalType);
             goals[i] = goalType;
             if (maxCard.Suit == currentCard.Suit && currentCard.Rank > maxCard.Rank)
             {
@@ -106,6 +184,8 @@ public class GameController
         if (numIndex > -1)
         {
             grabber.Goals.Add(RuleModel.GOAL_TRICK);
+            grabber.LevelScore += GameModel.inst.level.GoalCost;
+            grabber.Score += GameModel.inst.level.GoalCost;
             GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
         }
 
@@ -115,6 +195,8 @@ public class GameController
             if (numIndex > -1)
             {
                 grabber.Goals.Add(goals[j]);
+                grabber.LevelScore += GameModel.inst.level.GoalCost;
+                grabber.Score += GameModel.inst.level.GoalCost;
                 GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
             }
         }
@@ -124,12 +206,16 @@ public class GameController
         if (grabber.Deck.Count == 2 && numIndex > -1)
         {
             grabber.Goals.Add(RuleModel.TRICK_7);
+            grabber.LevelScore += GameModel.inst.level.GoalCost;
+            grabber.Score += GameModel.inst.level.GoalCost;
             GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
         }
         numIndex = Array.IndexOf(GameModel.inst.level.Goals, RuleModel.TRICK_8);
         if (grabber.Deck.Count == 1 && numIndex > -1)
         {
             grabber.Goals.Add(RuleModel.TRICK_8);
+            grabber.LevelScore += GameModel.inst.level.GoalCost;
+            grabber.Score += GameModel.inst.level.GoalCost;
             GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
         }
 
@@ -137,8 +223,48 @@ public class GameController
         numIndex = Array.IndexOf(GameModel.inst.level.Goals, RuleModel.ANY);
         if (numIndex > -1)
         {
+            int scoreForAdd;
             grabber.Goals.Add(goals);
             GameModel.inst.level.Goals = GameModel.inst.level.Goals.Where((val, idx) => idx != numIndex).ToArray();
+
+            // обычная взятка
+            scoreForAdd = GameModel.inst.LevelsData[0].GoalCost;
+            if (!GameModel.inst.level.isNegative)
+            {
+                scoreForAdd = -scoreForAdd;
+            }
+            grabber.LevelScore += scoreForAdd;
+            grabber.Score += scoreForAdd;
+
+            // check last tricks
+            if (grabber.Deck.Count <= 2)
+            {
+                scoreForAdd = GameModel.inst.LevelsData[4].GoalCost;
+                if (!GameModel.inst.level.isNegative)
+                {
+                    scoreForAdd = -scoreForAdd;
+                }
+                grabber.LevelScore += scoreForAdd;
+                grabber.Score += scoreForAdd;
+            }
+
+            for (int a = 0; a < goals.Length; a++)
+            {
+                for (int b = 1; b < 7; b++)
+                {
+                    numIndex = Array.IndexOf(GameModel.inst.LevelsDataForCount[b].Goals, goals[a]);
+                    if (numIndex > -1)
+                    {
+                        scoreForAdd = GameModel.inst.LevelsDataForCount[b].GoalCost;
+                        if (!GameModel.inst.level.isNegative)
+                        {
+                            scoreForAdd = -scoreForAdd;
+                        }
+                        grabber.LevelScore += scoreForAdd;
+                        grabber.Score += scoreForAdd;
+                    }
+                }
+            }
         }
 
         GameModel.inst.currentPlayer = grabber;        

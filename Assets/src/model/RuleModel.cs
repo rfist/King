@@ -25,5 +25,12 @@ public enum GameStrategy
     NO_GIRLS,
     NO_LAST_TRICKS,
     NO_KING,
-    NO_ANY
+    NO_ANY,
+    TAKE_TRICKS,
+    TAKE_HEARTS,
+    TAKE_BOYS,
+    TAKE_GIRLS,
+    TAKE_LAST_TRICKS,
+    TAKE_KING,
+    TAKE_ANY
 }

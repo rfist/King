@@ -19,7 +19,58 @@ public class CardStrategy
             case GameStrategy.NO_TRICKS:
                 playingCard = NoTricksLogic.getCardForPlay(deck);
                 break;
-                
+
+            case GameStrategy.NO_HEARTS:
+                playingCard = NoHeartsLogic.getCardForPlay(deck);
+                break;
+
+            case GameStrategy.NO_BOYS:
+                playingCard = NoBoysLogic.getCardForPlay(deck);
+                break;
+
+            case GameStrategy.NO_GIRLS:
+                playingCard = NoGirlsLogic.getCardForPlay(deck);
+                break;
+
+            case GameStrategy.NO_LAST_TRICKS:
+                playingCard = NoLastTricksLogic.getCardForPlay(deck);
+                break;
+
+            case GameStrategy.NO_KING:
+                playingCard = NoKingLogic.getCardForPlay(deck);
+                break;
+
+            case GameStrategy.NO_ANY:
+                playingCard = NoAnyLogic.getCardForPlay(deck);
+                break;
+
+            case GameStrategy.TAKE_TRICKS:
+                playingCard = TakeLogic.getCardByTricksLogic(deck);
+                break;
+
+            case GameStrategy.TAKE_HEARTS:
+                playingCard = TakeLogic.getCardByHeartsLogic(deck);
+                break;
+
+            case GameStrategy.TAKE_BOYS:
+                playingCard = TakeLogic.getCardByBoysLogic(deck);
+                break;
+
+            case GameStrategy.TAKE_GIRLS:
+                playingCard = TakeLogic.getCardByGirlsLogic(deck);
+                break;
+
+            case GameStrategy.TAKE_LAST_TRICKS:
+                playingCard = TakeLogic.getCardByLastTricksLogic(deck);
+                break;
+
+            case GameStrategy.TAKE_KING:
+                playingCard = TakeLogic.getCardByKingLogic(deck);
+                break;
+
+            case GameStrategy.TAKE_ANY:
+                playingCard = TakeLogic.getCardByTakeAllLogic(deck);
+                break;
 
             default:
                 playingCard = NoTricksLogic.getCardForPlay(deck);

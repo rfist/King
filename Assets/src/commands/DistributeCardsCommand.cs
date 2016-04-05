@@ -25,21 +25,37 @@ public class DistributeCardsCommand : ICommand
 
         GameObject container = GameObject.Find(card.Owner.Container);
         Vector3 position = container.transform.Find("CardPlace").gameObject.transform.position;
+        CardMediator cardMediator;
         if (card.Owner.Id == Config.PLAYER_ME)
         {
             go.transform.position = new Vector3(position.x + number * Config.DISTANCE_BETWEEN_CARDS_FOR_PLAYER, position.y, 1);
-            renderer.sprite = Resources.Load<Sprite>("Cards/" + card.ImageName);
+            //renderer.sprite = Resources.Load<Sprite>("Cards/" + card.ImageName);
+            renderer.sprite = Resources.Load<Sprite>("Cards/CardBack");
             go.AddComponent<BoxCollider>();
-            CardMediator cardMediator = go.AddComponent<CardMediator>();
+            cardMediator = go.AddComponent<CardMediator>();
             cardMediator.card = card;
         }
         else {
-            //renderer.sprite = Resources.Load<Sprite>("Cards/CardBack");
-            renderer.sprite = Resources.Load<Sprite>("Cards/" + card.ImageName);
+            if (Config.IS_AI_CARDS_OPEN)
+            {
+                renderer.sprite = Resources.Load<Sprite>("Cards/" + card.ImageName);
+            }
+            else
+            {
+                renderer.sprite = Resources.Load<Sprite>("Cards/CardBack");
+            }
             go.transform.position = new Vector3(position.x + number * Config.DISTANCE_BETWEEN_CARDS, position.y, 1);
-            CardMediator cardMediator = go.AddComponent<CardMediator>();
+            cardMediator = go.AddComponent<CardMediator>();
             cardMediator.card = card;
         }
         card.gameObject = go;
+        float delay = number * 4 * Config.SPEED_DISTRIBUTION;
+        int playerNumber = card.Owner.Id;
+        if (playerNumber == Config.PLAYER_C && number == 7) // last card
+        {
+            cardMediator.IsLast = true;
+        }
+
+        AnimationHelper.makeDistribution(card, (Config.SPEED_DISTRIBUTION * playerNumber + delay) / 2);
     }
 }
