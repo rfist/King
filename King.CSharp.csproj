@@ -105,10 +105,12 @@
     <Compile Include="Assets\src\view\EndGameScoreMediator.cs" />
     <Compile Include="Assets\src\view\EndLevelScoreMediator.cs" />
     <Compile Include="Assets\src\view\FinalScoreMediator.cs" />
+    <Compile Include="Assets\src\view\LaunchKingMediator.cs" />
     <Compile Include="Assets\src\view\MaskTableMediator.cs" />
     <Compile Include="Assets\src\view\RuleBoxMediator.cs" />
     <Compile Include="Assets\src\view\ScoreTableMediator.cs" />
     <Compile Include="Assets\src\view\SelectPlayerMediator.cs" />
+    <Compile Include="Assets\src\view\SoundMediator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Plugins\Pixelplacement\iTween\ReadMe!\ReadMe!.txt" />
