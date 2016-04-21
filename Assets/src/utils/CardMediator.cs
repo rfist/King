@@ -18,9 +18,10 @@ public class CardMediator : MonoBehaviour {
             }
         }
 
-        if (Disabled || 
-            GameModel.inst.currentPlayer.Id != Config.PLAYER_ME || 
-            AnimationHelper.isAnimated)
+        if (Disabled ||
+            GameModel.inst.currentPlayer.Id != Config.PLAYER_ME ||
+            AnimationHelper.isAnimated ||
+            GameModel.inst.GameStatus == Config.GAME_STATUS_SELECT_LEVEL)
         {
             return;
         }

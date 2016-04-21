@@ -13,6 +13,12 @@ public class EventManager : MonoBehaviour
 
     public static string SHOW_SCORE_TABLE = "SHOW_SCORE_TABLE";
     public static string HIDE_SCORE_TABLE = "HIDE_SCORE_TABLE";
+    
+    public static string SHOW_SELECT_WINDOW = "SHOW_SELECT_WINDOW";
+    public static string HIDE_SELECT_WINDOW = "HIDE_SELECT_WINDOW"; 
+    public static string SELECT_LEVEL = "SELECT_LEVEL";
+
+    public static string MENU_DESELECT_ALL = "MENU_DESELECT_ALL";
 
     private static EventManager eventManager;
 

@@ -51,6 +51,7 @@ public class Config
     public static string ON_GAME_RESTART = "ON_GAME_RESTART";
 
     public static string GAME_STATUS_ACTIVE = "GAME_STATUS_ACTIVE";
+    public static string GAME_STATUS_SELECT_LEVEL = "GAME_STATUS_SELECT_LEVEL";
     public static string GAME_STATUS_FINISHED = "GAME_STATUS_FINISHED";
     public static string GAME_STATUS_SHOW_RESULTS = "GAME_STATUS_SHOW_RESULTS";
     public static string GAME_STATUS_READY_FOR_NEW = "GAME_STATUS_READY_FOR_NEW";

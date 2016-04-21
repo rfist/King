@@ -5,7 +5,7 @@ PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 8
   AndroidProfiler: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 2
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -90,7 +90,7 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleIdentifier: com.Rfist.King
-  bundleVersion: 1.1
+  bundleVersion: 2.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
@@ -173,7 +173,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 8aeef41050b24d94ca04e50c8f9d447d, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []

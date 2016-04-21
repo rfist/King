@@ -5,6 +5,7 @@ public class RuleBoxMediator : MonoBehaviour {
 
     public GameObject BackgroundPlus;
     public GameObject BackgroundMinus;
+    public GameObject BackgroundDark;
 
     private static float BLINK_TIME = 0.15f;
 
@@ -27,6 +28,7 @@ public class RuleBoxMediator : MonoBehaviour {
         renderer.sprite = Resources.Load<Sprite>(GameModel.inst.level.RuleImage);
         BackgroundMinus.SetActive(GameModel.inst.level.isNegative);
         BackgroundPlus.SetActive(!GameModel.inst.level.isNegative);
+        gameObject.SetActive(true);
     }
 
     void onStartGame()
@@ -38,7 +40,16 @@ public class RuleBoxMediator : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {      
+    void Update () {
+        bool IsActive = GameModel.inst.GameStatus != Config.GAME_STATUS_SELECT_LEVEL;
+        if (!IsActive)
+        {
+            gameObject.SetActive(IsActive);
+            BackgroundPlus.SetActive(IsActive);
+            BackgroundMinus.SetActive(IsActive);
+            BackgroundDark.SetActive(IsActive);
+        }
+
         if (IsAnimated)
         {
             GameObject go = GameModel.inst.level.isNegative ? BackgroundMinus : BackgroundPlus;

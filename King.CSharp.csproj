@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Assets\Menu.cs" />
     <Compile Include="Assets\src\AudioManager.cs" />
+    <Compile Include="Assets\src\CameraScript.cs" />
     <Compile Include="Assets\src\CommandManager.cs" />
     <Compile Include="Assets\src\Config.cs" />
     <Compile Include="Assets\src\Context.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Assets\src\ai\NoLastTricksLogic.cs" />
     <Compile Include="Assets\src\ai\NoTricksLogic.cs" />
     <Compile Include="Assets\src\ai\TakeLogic.cs" />
+    <Compile Include="Assets\src\commands\ChooseLevelCommand.cs" />
     <Compile Include="Assets\src\commands\DistributeCardsCommand.cs" />
     <Compile Include="Assets\src\commands\EndRoundCommand.cs" />
     <Compile Include="Assets\src\commands\ICommand.cs" />
@@ -102,14 +104,17 @@
     <Compile Include="Assets\src\utils\AnimationHelper.cs" />
     <Compile Include="Assets\src\utils\CardLogicHelper.cs" />
     <Compile Include="Assets\src\utils\CardMediator.cs" />
+    <Compile Include="Assets\src\view\CloseButtonMediator.cs" />
     <Compile Include="Assets\src\view\EndGameScoreMediator.cs" />
     <Compile Include="Assets\src\view\EndLevelScoreMediator.cs" />
     <Compile Include="Assets\src\view\FinalScoreMediator.cs" />
     <Compile Include="Assets\src\view\LaunchKingMediator.cs" />
+    <Compile Include="Assets\src\view\LevelIconMediator.cs" />
     <Compile Include="Assets\src\view\MaskTableMediator.cs" />
     <Compile Include="Assets\src\view\RuleBoxMediator.cs" />
     <Compile Include="Assets\src\view\ScoreTableMediator.cs" />
     <Compile Include="Assets\src\view\SelectPlayerMediator.cs" />
+    <Compile Include="Assets\src\view\SelectWindowMediator.cs" />
     <Compile Include="Assets\src\view\SoundMediator.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
-public class SelectPlayerContext : MonoBehaviour {
+public class CameraScript : MonoBehaviour {
 
-    public static int Count = 1;
-    public Text text;
     // Use this for initialization
+
+    //http://answers.unity3d.com/questions/618058/mobile-device-screen-sizes.html
     void Start () {
-        Count = 1;
         // set the desired aspect ratio (the values in this example are
         // hard-coded for 16:9, but you could make them into public
         // variables instead so you can set them at design time)
@@ -52,9 +50,6 @@ public class SelectPlayerContext : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Count < 4)
-        {
-            text.text = "Выберите " + Count + "-го партнера...";
-        }
-    }
+	
+	}
 }

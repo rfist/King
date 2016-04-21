@@ -81,8 +81,26 @@ public class GameController
 
     public void changeLevel()
     {
-        currentLevelIndex++;
-        if (currentLevelIndex > 13)
+        if (GameModel.inst.IsOriginalKing)
+        {
+            currentLevelIndex++;
+        }
+        else
+        {
+            currentLevelIndex = 1;
+        }
+        bool isOriginalKingEnd = currentLevelIndex > 13 && GameModel.inst.IsOriginalKing;
+        bool isAllLevelsPassed = true;
+        for (int levelId = 0; levelId < GameModel.inst.Players[Config.PLAYER_ME].LevelsData.Count; levelId++)
+        {
+            if (!GameModel.inst.Players[Config.PLAYER_ME].LevelsData[levelId].IsPassed)
+            {
+                isAllLevelsPassed = false;
+            }
+        }
+        bool isSelectedKingEnd = !GameModel.inst.IsOriginalKing && isAllLevelsPassed;
+
+        if (isOriginalKingEnd || isSelectedKingEnd) 
         {
             GameModel.inst.GameStatus = Config.GAME_STATUS_FINISHED;
             // EventManager.TriggerEvent(Config.ON_GAME_END);
@@ -93,7 +111,19 @@ public class GameController
             GameModel.inst.level.History = new ArrayList();
             CommandManager.inst.addCommand(typeof(ShuffleDeckCommand));
             CommandManager.inst.addCommand(typeof(DistributeCardsCommand));
-            GameModel.inst.currentPlayer = GameModel.inst.Players[GameModel.inst.level.FirstPlayer];            
+
+            GameModel.inst.FirstPlayer++;
+            if (GameModel.inst.FirstPlayer >= 4)
+            {
+                GameModel.inst.FirstPlayer = 0;
+            }
+
+            if (!GameModel.inst.IsOriginalKing)
+            {
+                GameModel.inst.GameStatus = Config.GAME_STATUS_SELECT_LEVEL;
+            }
+
+            GameModel.inst.currentPlayer = GameModel.inst.Players[GameModel.inst.FirstPlayer];            
 
             for (int i = 0; i < GameModel.inst.Players.Length; i++)
             {
@@ -107,14 +137,31 @@ public class GameController
     {
         EventManager.StartListening(Config.ON_TURN_ANIMATION_FINISHED, onTurnFinished);
         EventManager.StartListening(Config.ON_GRAB_ANIMATION_FINISHED, onGrabFinished);
-        EventManager.StartListening(Config.ON_START_ANIMATION_FINISHED, startGame);
+        EventManager.StartListening(Config.ON_START_ANIMATION_FINISHED, prepareToStartGame);
     }
 
     public void startGame()
     {
         GameModel.inst.cardsOnDeck = new ArrayList();
-        Debug.Log("start game" +  GameModel.inst.level.Id);
+        Debug.Log("start game" + GameModel.inst.level.Id);
         onGrabFinished();
+    }
+
+    public void prepareToStartGame()
+    {
+        if (GameModel.inst.IsOriginalKing)
+        {
+            startGame();
+        }
+        else
+        {
+            GameModel.inst.GameStatus = Config.GAME_STATUS_SELECT_LEVEL;
+            EventManager.TriggerEvent(EventManager.SHOW_SELECT_WINDOW);
+            if (GameModel.inst.FirstPlayer != Config.PLAYER_ME)
+            {
+                CommandManager.inst.addCommand(typeof(ChooseLevelCommand));
+            }
+        }
     }
 
     void onGrabFinished()

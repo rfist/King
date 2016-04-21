@@ -12,6 +12,8 @@ public class EndLevelScoreMediator : MonoBehaviour {
 
     private SpriteRenderer _spriteRenderer;
 
+    private bool isAnimationEnded = false;
+
 
     // Use this for initialization
     void Start () {
@@ -70,12 +72,13 @@ public class EndLevelScoreMediator : MonoBehaviour {
         newPosition.y = position.y - (GetComponent<Renderer>().bounds.size.y * 2);
         gameObject.transform.position = newPosition;
 
+        isAnimationEnded = false;
         iTween.MoveTo(gameObject, iTween.Hash("x", position.x, "y", position.y, "time", 1.5f, "oncomplete", "endMove")); 
     }
 
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isAnimationEnded)
         {
             Hide();
         }
@@ -142,6 +145,7 @@ public class EndLevelScoreMediator : MonoBehaviour {
         Debug.Log("endMove animation complete" + GameModel.inst.GameStatus);
         EventManager.TriggerEvent(EventManager.SHOW_SCORE);
 
+        isAnimationEnded = true;
         if (GameModel.inst.GameStatus == Config.GAME_STATUS_SHOW_RESULTS)
         {
             EventManager.TriggerEvent(Config.ON_SHOW_FINAL_SCORE_PLAYER_NUMBER + 1.ToString());

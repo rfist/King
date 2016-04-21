@@ -10,7 +10,7 @@ public class Context : MonoBehaviour {
 
 	void Start () {
         GameModel.inst.GameStatus = Config.GAME_STATUS_ACTIVE;
-        initPLayers();
+        initPlayers();
         initCards();
         initLevels();
         GameController.inst.currentLevelIndex = startLevel - 2;
@@ -90,11 +90,19 @@ public class Context : MonoBehaviour {
         level = new LevelVO(14, false, GameStrategy.TAKE_ANY, "Levels/Level14", Config.PLAYER_C, 0);
         level.Goals = new string[] { RuleModel.ANY, RuleModel.ANY, RuleModel.ANY, RuleModel.ANY, RuleModel.ANY, RuleModel.ANY, RuleModel.ANY, RuleModel.ANY };
         GameModel.inst.LevelsData.Add(level);
+
+        for (int playerIndex = 0; playerIndex < 4; playerIndex++)
+        {
+            for (int i = 0; i < GameModel.inst.LevelsData.Count; i++)
+            {
+                GameModel.inst.Players[playerIndex].LevelsData.Add(GameModel.inst.LevelsData[i].Clone);
+            }
+        }
     }
 
 
     // TODO: rewrite in future, add player selector
-    void initPLayers ()
+    void initPlayers ()
     {
 
         PlayerVO playerD = new PlayerVO(Config.PLAYER_ME, "", "1", "PlayerMe");
@@ -157,5 +165,11 @@ public class Context : MonoBehaviour {
             }
             Debug.Log("Pressed left click.");
         }
+    }
+
+    public static string TextForDisplay = "";
+    void OnGUI()
+    {
+        //GUI.Box(new Rect(Screen.width - 300, 0, 300, 50), "TextForDisplay " + TextForDisplay);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerVO
 {
@@ -11,7 +12,8 @@ public class PlayerVO
     public string ImageName = "";
     //public CardVO[] Deck;
     public ArrayList Deck = new ArrayList();
-    public string Container = "";
+    public string Container = "";    public List<LevelVO> LevelsData = new List<LevelVO>();
+
 
     public PlayerVO(int Id, string Name, string ImageName, string Container)
     {
@@ -19,6 +21,7 @@ public class PlayerVO
         this.Name = Name;
         this.ImageName = ImageName;
         this.Container = Container;
+        LevelsData = new List<LevelVO>();
     }
 
     public bool hasSuit(int Suit)

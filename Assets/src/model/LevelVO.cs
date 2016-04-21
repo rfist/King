@@ -11,6 +11,7 @@ public class LevelVO
     public int FirstPlayer = 0;
     public int GoalCost = 0;
     public ArrayList History;
+    public bool IsPassed = false;
 
 
     public LevelVO(int Id, bool isNegative, GameStrategy Strategy, string RuleImage, int FirstPlayer, int GoalCost)
@@ -22,6 +23,7 @@ public class LevelVO
         this.FirstPlayer = FirstPlayer;
         this.GoalCost = GoalCost;
         this.History = new ArrayList();
+        this.IsPassed = false;
     }
 
     public LevelVO Clone
